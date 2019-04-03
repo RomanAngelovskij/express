@@ -12,16 +12,15 @@ class m190329_101418_xml_files extends Migration
      */
     public function safeUp()
     {
-        if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-        }
+        $tableOptions = $this->db->driverName === 'mysql'
+            ? 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB'
+            : null;
 
         $this->createTable('{{%xml_files%}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(250)->notNull(),
             'created_at' => $this->integer()
-        ]);
+        ], $tableOptions);
 
         $this->createIndex('xml_files__names', '{{%xml_files%}}', 'name');
     }
